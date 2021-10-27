@@ -1,5 +1,4 @@
 "use strict";
-
 const path = require("path");
 const isLocal = typeof process.pkg === "undefined";
 const basePath = isLocal ? process.cwd() : path.dirname(process.execPath);
@@ -111,7 +110,7 @@ const layersSetup = (layersOrder) => {
   return layers;
 };
 
-const saveImage = (_editionCount) => {
+const saveImage = async (_editionCount) => {
   fs.writeFileSync(
     `${buildDir}/images/${_editionCount}.png`,
     canvas.toBuffer("image/png")
@@ -129,7 +128,7 @@ const drawBackground = () => {
   ctx.fillRect(0, 0, format.width, format.height);
 };
 
-const addMetadata = (_dna, _edition) => {
+const addMetadata = async (_dna, _edition) => {
   let dateTime = Date.now();
   let tempMetadata = {
     name: `${namePrefix} #${_edition}`,
@@ -261,7 +260,7 @@ const writeMetaData = (_data) => {
   fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
 };
 
-const saveMetaDataSingleFile = (_editionCount) => {
+const saveMetaDataSingleFile = async (_editionCount) => {
   let metadata = metadataList.find((meta) => meta.edition == _editionCount);
   debugLogs
     ? console.log(
@@ -289,6 +288,7 @@ function shuffle(array) {
 }
 
 const startCreating = async () => {
+  let pinataResponse;
   let layerConfigIndex = 0;
   let editionCount = 1;
   let failedCount = 0;
@@ -322,7 +322,7 @@ const startCreating = async () => {
           loadedElements.push(loadLayerImg(layer));
         });
 
-        await Promise.all(loadedElements).then((renderObjectArray) => {
+        await Promise.all(loadedElements).then(async (renderObjectArray) => {
           debugLogs ? console.log("Clearing canvas") : null;
           ctx.clearRect(0, 0, format.width, format.height);
           if (gif.export) {
@@ -356,6 +356,7 @@ const startCreating = async () => {
             ? console.log("Editions left to create: ", abstractedIndexes)
             : null;
           saveImage(abstractedIndexes[0]);
+          
           addMetadata(newDna, abstractedIndexes[0]);
           saveMetaDataSingleFile(abstractedIndexes[0]);
           console.log(

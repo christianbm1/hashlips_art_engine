@@ -22,7 +22,9 @@
   "author": "Daniel Eugene Botha (HashLips)",
   "license": "MIT",
   "dependencies": {
+    "@pinata/sdk": "^1.1.23",
     "canvas": "^2.8.0",
+    "dotenv": "^10.0.0",
     "gif-encoder-2": "^1.0.5",
     "sha1": "^1.1.1"
   }
