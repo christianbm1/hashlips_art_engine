@@ -57,7 +57,6 @@ async function saveOutputLinks(data){
         oldData = [];
     }
     oldData.push({"cid": `ipfs://${data}`});
-    console.log(oldData);
     writeMetaData(oldData);
 }
 
