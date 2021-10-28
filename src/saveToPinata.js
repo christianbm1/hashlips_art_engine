@@ -75,11 +75,11 @@ async function start(){
         let pinataRes = await pinFileToIPFS(fs.createReadStream(x));
         data.image = `ipfs://${pinataRes.IpfsHash}`;
         data.date = pinataRes.Timestamp;
-        let pinataRes2 = await pinJSONToIPFS(data);
+        //let pinataRes2 = await pinJSONToIPFS(data);
 
         await timer(2000);
-        console.log(`Json: ${data.name} with Image ${x} was saved with CID: ipfs://${pinataRes2.IpfsHash}`);
-        saveOutputLinks(pinataRes2.IpfsHash);
+        console.log(`Json: ${data.name} with image ${x} was saved updated.`);
+        //saveOutputLinks(pinataRes2.IpfsHash);
     }
 }
   
