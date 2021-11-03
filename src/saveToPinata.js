@@ -70,13 +70,16 @@ async function start(){
 
     for(let i=0; i < jsonFilesArr.length; i++){
         let rawdata = fs.readFileSync(jsonFilesArr[i].path);
+
         let data = JSON.parse(rawdata);
         let x = imagesFilesArr.filter((item) => item.name == data.image.split('/')[3])[0]['path'];
         let pinataRes = await pinFileToIPFS(fs.createReadStream(x));
         data.image = `ipfs://${pinataRes.IpfsHash}`;
         data.date = pinataRes.Timestamp;
         //let pinataRes2 = await pinJSONToIPFS(data);
-
+        fs.writeFile(jsonFilesArr[i].path, JSON.stringify(data), 'utf8', function (err) {
+            if (err) return console.log(err);
+         });
         await timer(2000);
         console.log(`Json: ${data.name} with image ${x} was saved updated.`);
         //saveOutputLinks(pinataRes2.IpfsHash);
