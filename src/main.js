@@ -55,6 +55,8 @@ const buildSetup = () => {
 
 const getRarityWeight = (_str) => {
   let nameWithoutExtension = _str.slice(0, -4);
+  //console.log(`slc: ${_str.slice(0, -3)}`);
+  //console.log(`nameWithoutExtension: ${nameWithoutExtension}`);
   var nameWithoutWeight = Number(
     nameWithoutExtension.split(rarityDelimiter).pop()
   );
@@ -80,6 +82,7 @@ const getElements = (path) => {
     .readdirSync(path)
     .filter((item) => !/(^|\/)\.[^\/\.]/g.test(item))
     .map((i, index) => {
+      console.log(`${path}${i}`);
       return {
         id: index,
         name: cleanName(i),
@@ -91,7 +94,8 @@ const getElements = (path) => {
 };
 
 const layersSetup = (layersOrder) => {
-  const layers = layersOrder.map((layerObj, index) => ({
+  const layers = layersOrder.map((layerObj, index) => (
+    {
     id: index,
     elements: getElements(`${layersDir}/${layerObj.name}/`),
     name:
@@ -180,7 +184,9 @@ const addAttributes = (_element) => {
 };
 
 const loadLayerImg = async (_layer) => {
+  //console.log(_layer)
   return new Promise(async (resolve) => {
+    
     const image = await loadImage(`${_layer.selectedElement.path}`);
     resolve({ layer: _layer, loadedImage: image });
   });
@@ -319,6 +325,7 @@ const startCreating = async () => {
         let loadedElements = [];
 
         results.forEach((layer) => {
+          //console.log(layer);
           loadedElements.push(loadLayerImg(layer));
         });
 
