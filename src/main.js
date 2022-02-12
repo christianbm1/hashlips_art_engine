@@ -45,7 +45,7 @@ const oldDna = require('./oldDna.json');
 
 const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
-    fs.rmdirSync(buildDir, { recursive: true });
+    fs.rmSync(buildDir, { recursive: true,  forcc: true});
   }
   fs.mkdirSync(buildDir);
   fs.mkdirSync(path.join(buildDir, "/json"));
@@ -306,7 +306,8 @@ function shuffle(array) {
 const startCreating = async () => {
   let pinataResponse;
   let layerConfigIndex = 0;
-  let editionCount = 1;
+  let editionCount = 305;
+  console.log(`starting w/ ${editionCount}`)
   let failedCount = 0;
   let abstractedIndexes = [];
   for (
@@ -314,7 +315,11 @@ const startCreating = async () => {
     i <= layerConfigurations[layerConfigurations.length - 1].growEditionSizeTo;
     i++
   ) {
+    
+    if(i > editionCount){
+      //console.log(i)
     abstractedIndexes.push(i);
+    }
   }
   if (shuffleLayerConfigurations) {
     abstractedIndexes = shuffle(abstractedIndexes);
