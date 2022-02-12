@@ -41,6 +41,8 @@ const HashlipsGiffer = require(path.join(
 
 let hashlipsGiffer = null;
 
+const oldDna = require('./oldDna.json');
+
 const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
     fs.rmdirSync(buildDir, { recursive: true });
@@ -82,7 +84,7 @@ const getElements = (path) => {
     .readdirSync(path)
     .filter((item) => !/(^|\/)\.[^\/\.]/g.test(item))
     .map((i, index) => {
-      console.log(`${path}${i}`);
+      //console.log(`${path}${i}`);
       return {
         id: index,
         name: cleanName(i),
@@ -243,22 +245,30 @@ const isDnaUnique = (_DnaList = new Set(), _dna = "") => {
 const createDna = (_layers) => {
   let randNum = [];
   _layers.forEach((layer) => {
+    console.log(layer.name);
     var totalWeight = 0;
     layer.elements.forEach((element) => {
       totalWeight += element.weight;
     });
     // number between 0 - totalWeight
+    console.log(`total weight: ${totalWeight}`);
     let random = Math.floor(Math.random() * totalWeight);
+    console.log(`random start: ${random}`);
     for (var i = 0; i < layer.elements.length; i++) {
       // subtract the current weight from the random weight until we reach a sub zero value.
+      console.log(layer.elements[i].weight);
       random -= layer.elements[i].weight;
+      //console.log(`if statment: ${random}`);
       if (random < 0) {
+        //console.log(`if statment push: ${layer.elements[i].id}:${layer.elements[i].filename}`);
+        console.log(`random end: ${random}`)
         return randNum.push(
           `${layer.elements[i].id}:${layer.elements[i].filename}`
         );
       }
     }
   });
+  console.log(randNum.join(DNA_DELIMITER));
   return randNum.join(DNA_DELIMITER);
 };
 
@@ -320,7 +330,7 @@ const startCreating = async () => {
       editionCount <= layerConfigurations[layerConfigIndex].growEditionSizeTo
     ) {
       let newDna = createDna(layers);
-      if (isDnaUnique(dnaList, newDna)) {
+      if (isDnaUnique(dnaList, newDna) && oldDna.find((old) => old === sha1(newDna)) == undefined) {
         let results = constructLayerToDna(newDna, layers);
         let loadedElements = [];
 

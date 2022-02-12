@@ -140,3 +140,9 @@ dist
 # OSX
 
 .DS_Store
+
+PLACEHOLDETEST/
+
+src/placeholder.zip
+src/placeholder/
+src/placeholderMetadata.js
