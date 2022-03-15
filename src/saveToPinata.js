@@ -10,7 +10,7 @@ const fs = require("fs");
 
 const imagesDir = path.join(basePath, "/build/images");
 const jsonDir = path.join(basePath, "/build/json");
-const pinataReadyDir = path.join(basePath, "/build/pinataReadyDir");
+const pinataReadyDir = path.join(basePath, "/build/jsonOut");
 
 if (fs.existsSync(pinataReadyDir)) {
     fs.rmdirSync(pinataReadyDir, { recursive: true });
@@ -79,16 +79,16 @@ async function start(){
         return a.id - b.id;
     });
 
-    let imagesFilesArr = await getFiles(imagesDir);
+    //let imagesFilesArr = await getFiles(imagesDir);
 
-    imagesFilesArr.sort(function (a, b) {
+    /*imagesFilesArr.sort(function (a, b) {
         return a.id - b.id;
-    });
+    });*/
 
     //console.log(imagesFilesArr);
 
     let counter = 0;
-    let cidsGenerated = [];
+    //let cidsGenerated = [];
     let filesSuccessfullySaved = [];
     var today = new Date();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -100,12 +100,16 @@ async function start(){
             let rawdata = fs.readFileSync(jsonFilesArr[i].path);
 
             let data = JSON.parse(rawdata);
-            let x = imagesFilesArr.filter((item) => item.name == data.image.split('/')[3])[0]['path'];
-            let pinataRes = await pinFileToIPFS(fs.createReadStream(x));
-            data.image = `ipfs://${pinataRes.IpfsHash}`;
-            data.date = pinataRes.Timestamp;
-            cidsGenerated.push(pinataRes.IpfsHash);
-            fs.writeFile(`${pinataReadyDir}/${i + 1}`, JSON.stringify(data), 'utf8', function (err) {
+            //console.log(data);
+            //let x = imagesFilesArr.filter((item) => item.name == data.image.split('/')[3])[0]['path'];
+            //let pinataRes = await pinFileToIPFS(fs.createReadStream(x));
+            //data.image = `ipfs://${pinataRes.IpfsHash}`;
+            //data.date = pinataRes.Timestamp;
+            //cidsGenerated.push(pinataRes.IpfsHash);
+            data.attributes.push({"trait_type": "SPECIAL",
+            "value": "Founder Edition"});
+            console.log(data.attributes);
+            fs.writeFile(`${pinataReadyDir}/${i + 1}.json`, JSON.stringify(data), 'utf8', function (err) {
                 if (err) return console.log(err);
             });
             await timer(2000);

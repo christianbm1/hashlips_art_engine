@@ -245,30 +245,24 @@ const isDnaUnique = (_DnaList = new Set(), _dna = "") => {
 const createDna = (_layers) => {
   let randNum = [];
   _layers.forEach((layer) => {
-    console.log(layer.name);
     var totalWeight = 0;
     layer.elements.forEach((element) => {
       totalWeight += element.weight;
     });
     // number between 0 - totalWeight
-    console.log(`total weight: ${totalWeight}`);
     let random = Math.floor(Math.random() * totalWeight);
-    console.log(`random start: ${random}`);
     for (var i = 0; i < layer.elements.length; i++) {
       // subtract the current weight from the random weight until we reach a sub zero value.
-      console.log(layer.elements[i].weight);
       random -= layer.elements[i].weight;
       //console.log(`if statment: ${random}`);
       if (random < 0) {
         //console.log(`if statment push: ${layer.elements[i].id}:${layer.elements[i].filename}`);
-        console.log(`random end: ${random}`)
         return randNum.push(
           `${layer.elements[i].id}:${layer.elements[i].filename}`
         );
       }
     }
   });
-  console.log(randNum.join(DNA_DELIMITER));
   return randNum.join(DNA_DELIMITER);
 };
 
@@ -306,7 +300,7 @@ function shuffle(array) {
 const startCreating = async () => {
   let pinataResponse;
   let layerConfigIndex = 0;
-  let editionCount = 305;
+  let editionCount = 306;
   console.log(`starting w/ ${editionCount}`)
   let failedCount = 0;
   let abstractedIndexes = [];
@@ -316,7 +310,7 @@ const startCreating = async () => {
     i++
   ) {
     
-    if(i > editionCount){
+    if(i > 305){
       //console.log(i)
     abstractedIndexes.push(i);
     }
